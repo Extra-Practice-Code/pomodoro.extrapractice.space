@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Time</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="images/red-tomato.png">
+</head>
+<body>
+
+<div class="container">
+  <div id="timer" class="timer active red">
+    <div class="tomato-grid"></div>
+    <div class="minute-text">25:00</div>
+    <div id="buttons">
+        <button id="startPomo" class="button">start pomodoro</button>
+        <button id="startShortBreak" class="button">short break</button>
+        <button id="startLongBreak" class="button">long break</button>
+    </div>
+    <div class="options">
+      <label><input type="checkbox" id="soundOption" checked> Sound On</label>
+      <label><input type="checkbox" id="notificationOption"> Notifications On</label>
+    </div>
+  </div>
+</div>
+
+<div id="credit">This pomodoro timer was made for the pomodoro event on April 26, 2024 at <a href="https://extrapractice.space">Extra Practice</a>. Our friend JB DJed for 3 hours. <a href="">Listen to his mix</a> for <a href="https://goodtimesbadtimes.club/">Good Times Bad Times</a>.</div>
+
+<audio id="timerSound" src="https://attachments.are.na/27790737/4d6ceb6aece6dc9df9259fc1df13135f.mp3" preload="auto"></audio>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>
