@@ -51,10 +51,9 @@
   }
 
   .tomato-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 60px); /* 5 columns for tomatoes */
-    gap: 5px;
-    margin: 20px 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
   }
 
   .tomato {
@@ -78,9 +77,6 @@
     background: transparent;
     border: 0;
     outline: none;
-  }
-  .button:hover {
-    text-decoration: underline;
   }
 
   .options {
