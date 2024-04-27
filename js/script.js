@@ -44,8 +44,16 @@ function updateTitle(time) {
 }
 
 function notifyUser(message) {
-    if (Notification.permission === 'granted' && notificationOption.checked) {
+    if (!("Notification" in window)) {
+        console.log("This browser does not support system notifications");
+    } else if (Notification.permission === "granted" && notificationOption.checked) {
         new Notification(message);
+    } else if (Notification.permission !== "denied" && notificationOption.checked) {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                new Notification(message);
+            }
+        });
     }
 }
 
@@ -64,27 +72,35 @@ function startTimer(duration, tomatoType, sessionType) {
 
     timerElement.className = sessionType === 'pomo' ? 'timer red' : 'timer green';
 
-    intervalId = setInterval(() => {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        const time = minutes + ":" + seconds;
-        minuteText.textContent = time;
-        updateTitle(time);
+    // Update the display immediately before starting the interval
+    updateTimerDisplay(timer);
 
-        if (--timer < 0) {
+    intervalId = setInterval(() => {
+        timer--;
+        updateTimerDisplay(timer);
+
+        if (timer < 0) {
             clearInterval(intervalId);
             notifyUser(sessionType === 'pomo' ? 'Pomodoro complete! Take a break.' : 'Break is over! Time to focus.');
             playSound();
             if (sessionType === 'pomo') {
-                startTimer(shortBreakDuration, 'green', 'shortBreak'); // Start a short break
+                startTimer(shortBreakDuration, 'green', 'shortBreak');
             } else if (sessionType === 'shortBreak') {
-                startTimer(pomoDuration, 'red', 'pomo'); // Start a Pomodoro
+                startTimer(pomoDuration, 'red', 'pomo');
             } else if (sessionType === 'longBreak') {
-                startTimer(pomoDuration, 'red', 'pomo'); // Start a Pomodoro
+                startTimer(pomoDuration, 'red', 'pomo');
             }
         }
     }, 1000);
+}
+
+function updateTimerDisplay(timer) {
+    let minutes = parseInt(timer / 60, 10);
+    let seconds = parseInt(timer % 60, 10);
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    let time = minutes + ":" + seconds;
+    minuteText.textContent = time;
+    updateTitle(time);
 }
 
 startPomoButton.addEventListener('click', () => {
@@ -96,11 +112,35 @@ startShortBreakButton.addEventListener('click', () => {
 });
 
 startLongBreakButton.addEventListener('click', () => {
-    startTimer(longBreakDuration, 'green', 'longBreak'); // Fixed the 15-minute timer
+    startTimer(longBreakDuration, 'green', 'longBreak');
 });
+
+// Add this event listener for the notifications option
+document.getElementById('notificationOption').addEventListener('change', function() {
+    if (this.checked) {
+        checkAndRequestNotificationPermission();
+    }
+});
+
+function checkAndRequestNotificationPermission() {
+    if (!("Notification" in window)) {
+        console.log("This browser does not support desktop notification");
+        alert("This browser does not support desktop notification");
+    } else if (Notification.permission === "granted") {
+        console.log("Notification permission already granted.");
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                console.log("Notification permission granted.");
+            } else {
+                console.log("Notification permission denied.");
+            }
+        });
+    }
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupTomatoes(pomoDuration / 60, 'red');
-    requestNotificationPermission();
+    checkAndRequestNotificationPermission(); // Ensure notification permissions are handled on load
 });
