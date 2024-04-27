@@ -39,7 +39,7 @@ function fadeInTomatoes(duration) {
 }
 
 function updateTitle(time) {
-    const title = currentSessionType === 'pomo' ? 'Time to focus!' : 'Time for a break!';
+    const title = currentSessionType === 'pomo' ? 'focus mode' : 'break mode';
     document.title = `${time} - ${title}`;
 }
 
@@ -81,7 +81,7 @@ function startTimer(duration, tomatoType, sessionType) {
 
         if (timer < 0) {
             clearInterval(intervalId);
-            notifyUser(sessionType === 'pomo' ? 'Pomodoro complete! Take a break.' : 'Break is over! Time to focus.');
+            notifyUser(sessionType === 'pomo' ? '🍅 pomodoro complete. take a break' : '🟢 break is over');
             playSound();
             if (sessionType === 'pomo') {
                 startTimer(shortBreakDuration, 'green', 'shortBreak');
